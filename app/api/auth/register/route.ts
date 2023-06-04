@@ -1,12 +1,12 @@
-import { getErrorResponse } from "@/lib/helpers";
-import { prisma } from "@/lib/prismadb";
+import { getErrorResponse } from '@/lib/helpers';
+import { prisma } from '@/lib/prismadb';
 import {
   RegisterUserInput,
   RegisterUserSchema,
-} from "@/lib/validations/user.schema";
-import { hash } from "bcryptjs";
-import { NextRequest, NextResponse } from "next/server";
-import { ZodError } from "zod";
+} from '@/lib/validations/user.schema';
+import { hash } from 'bcryptjs';
+import { NextRequest, NextResponse } from 'next/server';
+import { ZodError } from 'zod';
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,21 +26,21 @@ export async function POST(req: NextRequest) {
 
     return new NextResponse(
       JSON.stringify({
-        status: "success",
+        status: 'success',
         data: { user: { ...user, password: undefined } },
       }),
       {
         status: 201,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
       }
     );
   } catch (error: any) {
     if (error instanceof ZodError) {
-      return getErrorResponse(400, "failed validations", error);
+      return getErrorResponse(400, 'failed validations', error);
     }
 
-    if (error.code === "P2002") {
-      return getErrorResponse(409, "user with that email already exists");
+    if (error.code === 'P2002') {
+      return getErrorResponse(409, 'user with that email already exists');
     }
 
     return getErrorResponse(500, error.message);
